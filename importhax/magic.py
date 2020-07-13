@@ -1,15 +1,21 @@
 
+import importlib
+
+
 class ImportWrapper:
 
-    __my_tf = None
+    name = None
+    __my_module = None
+
+    def __init__(self, name):
+        self.name = name
 
     def __getattr__(self, item):
-        if self.__my_tf is None:
-            print('Importing tensorflow')
-            import tensorflow
-            self.__my_tf = tensorflow
+        if self.__my_module is None:
+            print('Importing {}'.format(self.name))
+            self.__my_module = importlib.import_module(self.name)
 
-        return getattr(self.__my_tf, item)
+        return getattr(self.__my_module, item)
 
 
-tf = ImportWrapper()
+tf = ImportWrapper('tensorflow')
